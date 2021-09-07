@@ -22,3 +22,5 @@ An interpreter for a customized language: AXL
   * patterns: pattern matching with lists, strings, literals, wildcards, unions and variables
   * queries: file I/O, query expressions
 * textfiles: .txt files used by testfiles to demonstrate file I/O
+
+Axl interpreter written in Python using version 3.10.0a6, which includes pattern matching. Previous versions of Python will be unable to run Axl since they do not include pattern matching.
