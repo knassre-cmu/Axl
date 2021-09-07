@@ -1,0 +1,132 @@
+$ Testing file I/O
+tableToCSV is (function of (path, L) -> (
+    result is ("")
+    rows is (length of (L))
+    i is (0)
+    while (i < rows) is true do (
+        row is (index of (L, i))
+        cols is (length of (row))
+        j is (0)
+        while (j < cols) is true do (
+            result is (result + string of (index of (row, j)))
+            if (j < cols - 1) is true then do (result is (result + ","))
+            j is (j + 1)
+        )
+        if (i < rows - 1) is true then do (result is (result + "\n"))
+        i is (i + 1)
+    )
+    void is (filewrite of (path, result))
+    output (nothing)
+))
+
+$ Testing file I/O
+csvToTable is (function of (path) -> (
+    s is (fileread of (path))
+    result is ([])
+    currentRow is ([])
+    currentVal is ("")
+    for each element char of (s) do (
+        match (char) with (
+            pattern ("\n") -> (
+                currentRow is (currentRow + [evaluate of (currentVal)])
+                result is (result + [currentRow])
+                currentRow is ([])
+                currentVal is ("")
+            )
+            pattern (",") -> (
+                currentRow is (currentRow + [evaluate of (currentVal)])
+                currentVal is ("")
+            )
+            pattern (_) -> (
+                currentVal is (currentVal + char)
+            )
+        )
+    )
+    currentRow is (currentRow + [evaluate of (currentVal)])
+    result is (result + [currentRow])
+    output (result)
+))
+
+$ Gets the course number from a row and mods by 1000
+mod1000 is (function of (L) -> (output (index of (L, 0) % 1000)))
+
+$ Returns a function that outputs true if element i of L equals s
+equalTo is (function of (i, s) -> (output (function of (L) -> (output (index of (L, i) = s)))))
+
+$ Takes in a grouping [language, [rows]] and converts [rows] to a list of course numbers
+getNumbers is (function of (L) -> (output ([index of (L, 0), query (index of (L, 1) @ [0] @ select @ collate)])))
+
+$ Takes in a row of the CS table and returns that same row plus the number with the last 2 digits ignored
+getDifficulty is (function of (L) -> (output ([(index of (L, 0) / 100) * 100] + L)))
+
+$ Combination function that adds two inputs
+summation is (function of (x, y) -> (output x + y))
+
+$ Takes in a grouping [number, [rows]] and converts [rows] to an average number of hours
+getTotalHours is (function of (L) -> (
+    len is (length of (index of (L, 1)))
+    total is (query (index of (L, 1) @ [5] @ select @ collate @ summation @ 0 @ combine))
+    output ([index of (L, 0), total / len])))
+
+$ Takes in a grouping [foodType, [rows]] and converts [rows] to an average cost per pound
+getCCP is (function of (L) -> (
+    len is (length of (index of (L, 1)))
+    total is (query (index of (L, 1) @ [7] @ select @ collate @ summation @ 0 @ combine))
+    output ([index of (L, 0), total / len])))
+
+$ Takes in a pair [name, sugar] and returns true if the name ends with berry
+isBerry is (function of (L) -> (
+    match (index of (L, 1)) with (
+        pattern ("*berry") -> (output (true)) 
+        pattern (_) -> (output (false))
+    )))
+
+$ Takes in a pair [name rows] and conversts [rows] to the total cost of that person's order
+totalCost is (function of (L) -> (
+    name is (index of (L, 0))
+    table is (index of (L, 1))
+    releventCols is (query (table @ [7, 11] @ select))
+    mult is (function of (L) -> (output (index of (L, 0) * index of (L, 1) / 100)))
+    multiplied is (query (releventCols @ mult @ apply))
+    total is (query (multiplied @ summation @ 0 @ combine))
+    output ([name, total])
+))
+
+A is (tableToCSV of ("textfiles/testio.txt", [[1, 2, 3], [4, 5, 6], [7, 8, 9], ["a", "b", "c"], [true, false, nothing]]))
+B is (csvToTable of ("textfiles/testio.txt"))
+
+$ Rows 1, 4 and 6 of the table
+C is (query ((csvToTable of ("textfiles/csdata.txt")) @ [1, 4, 6] @ extract))
+
+$ Unique values of column 2 of the table, collated into a single list
+D is (query ((csvToTable of ("textfiles/csdata.txt")) @ [2] @ select @ unique @ collate))
+
+$ The top 5 rated courses of the table
+E is (query ((csvToTable of ("textfiles/csdata.txt")) @ [3] @ order @ reverse @ [0, 3] @ select @ 5 @ take))
+
+$ The rows of the table where the language is SML
+F is (query ((csvToTable of ("textfiles/csdata.txt")) @ equalTo of (2, "SML") @ keep))
+
+$ The course number of each row without the 15-XXX
+G is (query ((csvToTable of ("textfiles/csdata.txt")) @ mod1000 @ apply))
+
+$ Each unique language followed by the list of all course numbers using that language
+H is (query ((csvToTable of ("textfiles/csdata.txt")) @ [2] @ grouping @ getNumbers @ apply))
+
+$ Each course difficulty followed by the average number of hours for those courses
+I is (query ((csvToTable of ("textfiles/csdata.txt")) @ getDifficulty @ apply @ [0] @ grouping @ getTotalHours @ apply))
+
+$ Each food sorted by cost highest-to-lowest, using alphabetical order as a tiebreaker
+J is (query ((csvToTable of ("textfiles/food.txt")) @ [1] @ order @ reverse @ [7] @ order @ reverse @ [1, 7] @ select))
+
+$ Each food type mapped to average cost per pound
+K is (query ((csvToTable of ("textfiles/food.txt")) @ [2] @ grouping @ getCCP @ apply))
+
+$ Each unique food color
+L is (query ((csvToTable of ("textfiles/food.txt")) @ [3] @ select @ unique @ collate))
+
+$ Mapping of each berry to the sugar per berry
+M is (query ((csvToTable of ("textfiles/food.txt")) @ isBerry @ keep @ [1, 5] @ select))
+
+$ Mapping of each person to the total cost of their purchases
+N is (query ((csvToTable of ("textfiles/food.txt")) @ (csvToTable of ("textfiles/orders.txt")) @ [0] @ [2] @ join @ [9] @ grouping @ totalCost @ apply))

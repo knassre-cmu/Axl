@@ -1,0 +1,86 @@
+$ Testing higher order functions, local variables, and while loops
+map is (function of (L, f) -> (
+    result is ([])
+    n is (length of (L))
+    i is (0)
+    while (i < n) is true do (
+        elem is (index of (L, i))
+        result is (result + [f of (elem)])
+        i is (i + 1)
+    )
+    output (result)
+))
+
+$ Testing currying
+makeAdder is (function of (x) -> (
+    curry is (function of (y) -> (output (x + y)))
+    output (curry)
+))
+
+$ Testing staging
+kthLargest is (function of (L) -> (
+    sorted is (sort of (L))
+    curry is (function of (k) -> (output (index of (sorted, k))))
+    output (curry)
+))
+
+$ Testing basic CPS
+incrCPS is (function of (x) -> (
+    curry is (function of (f) -> (output (f of (x + 1))))
+    output (curry)
+))
+
+$ Testing basic CPS
+doubCPS is (function of (x) -> (
+    curry is (function of (f) -> (output (f of (x * 2))))
+    output (curry)
+))
+
+$ Testing basic CPS
+squaCPS is (function of (x) -> (
+    curry is (function of (f) -> (output (f of (x ^ 2))))
+    output (curry)
+))
+
+$ Testing basic CPS
+intCPS is (function of (x) -> (
+    curry is (function of (f) -> (output (f of (integer of (x)))))
+    output (curry)
+))
+
+$ Testing basic CPS
+strCPS is (function of (x) -> (
+    curry is (function of (f) -> (output (f of (string of (x)))))
+    output (curry)
+))
+
+$ Testing recursive CPS
+factorialCPS is (function of (x) -> (
+    curry is (function of (f) -> (
+        if (x < 2) is true then do (output (f of (1)))
+        newF is (function of (y) -> (output (f of (x * y))))
+        output (factorialCPS of (x - 1) of (newF))
+    ))
+    output curry
+))
+
+$ Basic utilities for testing CPS
+identity is (function of (x) -> (output (x)))
+chain is (function of (L) -> (
+    result is (index of (L, 0))
+    i is (1)
+    n is (length of (L))
+    while (i < n) is true do (
+        elem is (index of (L, i))
+        result is (result of (elem))
+        i is (i + 1)
+    )
+    output (result of (identity))
+))
+
+A is ([5, 1, 3, 0, 8, 21, 13, 89, 55, 2, 34, 1])
+B is (map of ([0, -24, 112, 45], makeAdder of (15)))
+C is (map of ([8, 7, 6, 5], kthLargest of (A)))
+D is (incrCPS of (23) of (strCPS) of (doubCPS) of (intCPS) of (incrCPS) of (identity))
+E is (chain of ([incrCPS, 23, incrCPS, squaCPS, strCPS, doubCPS, intCPS, incrCPS, incrCPS]))
+$ F is (factorialCPS of (3) of (identity))

@@ -1,0 +1,150 @@
+$ Testing basic functions with input and output
+foo is (function of (x) -> (output (x ^ 2 - 1)))
+
+$ Testing higher order functions, local variables, and while loops
+map is (function of (L, f) -> (
+    result is ([])
+    n is (length of (L))
+    i is (0)
+    while (i < n) is true do (
+        elem is (index of (L, i))
+        result is (result + [f of (elem)])
+        i is (i + 1)
+    )
+    output (result)
+))
+
+$ Testing for loops and conditionals
+filter is (function of (L, f) -> (
+    result is ([])
+    for each element elem of (L) do (
+        if (f of (elem)) is true then do (result is (result + [elem]))
+    )
+    output (result)
+))
+
+$ Testing higher order functions with various inputs
+reduce is (function of (f, seed, L) -> (
+    result is (seed)
+    for each element elem of (L) do (
+        result is (f of (result, elem))
+    )
+    output (result)
+))
+
+$ Testing recursion and definitions with multiple expressions
+fibonacci is (function of (n) -> (
+    if (n < 2) is true then do (output (n))
+    a, b is (fibonacci of (n - 1), fibonacci of (n - 2))
+    output (a + b)
+))
+
+$ Basic list construction utlity for testing
+enumeration is (function of (n) -> (
+    result is ([])
+    i is (0)
+    while (i < n) is true do (
+        result is (result + [i])
+        i is (i + 1)
+    )
+    output (result)
+))
+
+$ Basic predicate for testing
+even is (function of (x) -> (output x % 2 = 0))
+
+$ Basic predicate for testing
+isPerfectSquare is (function of (x) -> (
+    i is (0)
+    j is (0)
+    while (j < x) is true do (
+        i is (i + 1)
+        j is (i ^ 2)
+    )
+    output (j = x)
+))
+
+$ Basic combination function for testing
+concatenate is (function of (x, y) -> (
+    s is (string of (x))
+    t is (string of (y))
+    u is (s + t)
+    v is (integer of (u))
+    output (v)
+))
+
+$ Testing null values, more complex conditions, recursive backtracking
+subsetSum is (function of (L, i, k) -> (
+    n is (length of (L))
+    if (k = 0) is true then do (output ([]))
+    if (i > n | i = n) is true then do (output (nothing))
+    head is (index of (L, i))
+    include is (subsetSum of (L, i + 1, k - head))
+    if (!(include = nothing)) is true then do (output ([head] + include))
+    output (subsetSum of (L, i + 1, k))
+))
+
+$ Testing break and continue
+oddDigitSum is (function of (n) -> (
+    total is (0)
+    while (true) is true do (
+        if (n = 0) is true then do (endloop)
+        digit is (n % 10)
+        n is (n / 10)
+        if (digit % 2 = 0) is true then do (skiploop)
+        total is (total + digit)
+    )
+    output (total)
+))
+
+$ Testing a combination of various features
+recemanSequence is (function of (n) -> (
+    result is ([0])
+    contains is (function of (L, x) -> (
+        for each element y of (L) do (
+            if (x = y) is true then do (output (true))
+        )
+        output (false)
+    ))
+    while (true) is true do (
+        prev is (index of (result, -1))
+        delt is (length of (result))
+        plus, minu is (prev + delt, prev - delt)
+        match ([minu < 0, contains of (result, minu)]) with (
+            pattern ([true, _] | [_, true]) -> (result is (result + [plus]))
+            pattern (_) -> (result is (result + [minu]))
+        )
+        if (length of (result) = (n + 1)) is true then do (endloop)
+    )
+    output (result)
+))
+
+$ Testing a combination of various features
+nthPrime is (function of (n) -> (
+    isPrime is (function of (n) -> (
+        if (n < 2) is true then do (output (false))
+        for each element i of (enumeration of (n - 1)) do (
+            if (i < 2) is true then do (skiploop)
+            if (n % i = 0) is true then do (output (false))
+        )
+        output (true)
+    ))
+    found is (-1)
+    guess is (-1)
+    while (found < n) is true do (
+        guess is (guess + 1)
+        if (isPrime of (guess)) is true then do (found is (found + 1))
+    )
+    output guess
+))
+
+A is (map of (enumeration of (7), foo))
+B is (map of (enumeration of (10), fibonacci))
+C is (filter of (enumeration of (7), even))
+D is (filter of (enumeration of (101), isPerfectSquare))
+E is (reduce of (function of (x, y) -> (output (x * y)), 1, [1, 5, 2, 1, 3]))
+G is (reduce of (concatenate, "", [1, 5, 2, 1, 3]))
+H is (subsetSum of ([15, -112, 64, 16, -72, 25, 13, 1, 12, 255], 0, 144))
+I is (map of ([15112, 15150, 15122, 15210, 15213, 15122], oddDigitSum))
+J is (recemanSequence of (25))
+K is (map of (enumeration of (20), nthPrime))

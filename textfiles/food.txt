@@ -1,0 +1,22 @@
+1,Artichoke,V,Green,60,130,20,125
+2,Apricot,F,Orange,17,320,10,249
+3,Apple,F,Red,95,19,30,132
+4,Blueberry,F,Blue,85,15,50,60
+5,Strawberry,F,Red,4,60,0,222
+6,Raspberry,F,Red,65,50,80,646
+7,Onion,V,White,44,470,10,99
+8,Rhubarb,V,Red,26,130,20,298
+9,Steak (Salmon),M,Orange,412,0,270,799
+10,Cranberry,F,Red,123,40,50,469
+11,Cauliflower,V,White,146,110,160,199
+12,Banana,F,Yellow,105,140,40,57
+13,Carrot,V,Orange,25,290,10,133
+14,Orange,F,Orange,45,90,10,133
+15,Lime,F,Green,20,110,13,199
+16,Fennel,V,Green,27,340,47,199
+17,Steak (Beef),M,Brown,299,0,12,1539
+18,Chicken Breast,M,Brown,231,0,5,337
+19,Lemon,F,Yellow,24,150,24,199
+21,Habanero,V,Orange,18,40,20,1489
+21,Blackberry,F,Blue,62,70,70,485
+22,Steak (Pork),M,Brown,438,0,0,425

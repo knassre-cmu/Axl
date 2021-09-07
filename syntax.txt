@@ -1,0 +1,86 @@
+Statements:
+
+    Variable Definitions:
+        • <variable> is (<expression>)
+        • <variable>, <variable> is  (<expression>, <expression>)
+        ...
+
+    Conditional Statements:
+        • if (<expression>) is true then do (<statements>)
+        • if (<expression>) is true then do (<statements>) otherwise do (<statements>)
+
+    Loops:
+        • while (<expression>) is true do (<statements>)
+        • for each element <variable> of (<expression>) do (<statements>)
+
+    Loop Control:
+        • skiploop
+        • endloop
+
+    Function Output:
+        • output (<expression>)
+        • output (<expression>, <expression>)
+
+    Pattern Matching:
+        • match (<expression>) with (
+            pattern (<pattern>) -> (statements)
+            pattern (<pattern>) -> (statements)
+            ...
+        )
+
+Expressions:
+    • Numbers: 0, 1, 2, 15, -112, etc.
+    • Strings: "foo", "bar666", "", "Alpha Beta Pruning!", etc.
+    • Booleans: true, false
+    • Lists: [], [15], [[1, 2], [3, 4]], etc.
+    • Function Definitions: function of (x, y, ...) -> (<statements>)
+    • Function Calls: <expression> of (<expression>, <expression>, ...)
+    • Conditionals: x | y, x & y
+    • Comparisons: x < y, x = y, x > y
+    • Operations: x + y, x - y, x * y, x / y, x ^ y, x % y
+    • Unary Modifiers: +x, -x, !x
+    • Query Expression: query (<query> @ <query> @ ... @ <query>)
+
+Queries:
+    • Expressions
+    • Extract (T @ [x, y, z]) @ extract = extracts rows x, y, z of T)
+    • Select (T @ [x, y, z]) @ select = selects columns x, y, z of T)
+    • Order (T @ [x, y, z]) @ order = sorts T by column x, then y, then z)
+    • Reverse (T @ reverse = reverses the elements of T)
+    • Grouping (T @ [x, y, z]) @ grouping = groups T into a new table based on values of x, y and z)
+    • Keep (T @ f @ keep = filters T so that only rows where f is true remain)
+    • Apply (T @ f @ apply = applies f to each row of T)
+    • Collate (T @ collate = adds the rows of T into a single list)
+    • Combine (T @ f @ s @ combines = combines the elements of T using f with s as the seed value)
+    • Join (T @ U @ [x1, x2] @ [y1, y2] @ join = T[i] + U[j] for all i, j if T[i][x1] = U[j][y1], T[i][x2] = U[j][y2], etc.)
+    • Take (T @ x @ take = takes the first x elements of T)
+    • Drop (T @ x @ drop = drops the first x elements of T)
+
+Patterns:
+    String pattern:
+        • "" -> matches with ""
+        • "abc" -> matches with "abc"
+        • "a_e" -> matches with "abe", "ace", "aoe", etc.
+        • "*" -> matches with any string 
+        • "a*" -> matches with "a", "act", "absolute", etc.
+        • "*ed" -> matches with "ed", "watched", "hoped", etc.
+        • "*oo*" -> matches with "ooky", "foo", "books", etc.
+        • "*a*a*" -> matches with "canvas", "mathematics", etc.
+
+    Number pattern:
+        • 42 -> matches with 42
+
+    Variable pattern:
+        • x -> matches with anything (and binds it to x)
+
+    Wildcard pattern:
+        • _ -> matches with anything
+
+    List pattern:
+        • [] -> matches with []
+        • [a] -> matches with [16] (and binds a to 16)
+        • [1, 5, *rest] -> matches with [1, 5, 1, 1, 2] (and binds [1, 1, 2] to rest)
+
+    Conditional pattern:
+        • P | Q -> matches anything that matches with P or Q
+        • P & Q -> matches anything that matches with P and Q

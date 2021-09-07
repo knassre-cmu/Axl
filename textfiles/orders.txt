@@ -1,0 +1,14 @@
+1,Kian Nassre,2,10
+2,Alex Xie,5,2
+5,Kimchee,1,15
+4,Sara Liang,4,30
+5,Kimchee,6,1
+5,Kimchee,19,12
+3,Joe Ritze,12,32
+3,Joe Ritze,21,1
+4,Sara Liang,14,1
+2,Alex Xie,3,3
+1,Kian Nassre,2,3
+1,Kian Nassre,19,1
+5,Kimchee,4,42
+4,Sara Liang,9,5

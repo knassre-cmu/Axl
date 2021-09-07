@@ -1,0 +1,97 @@
+$ Testing higher order functions, local variables, and while loops
+map is (function of (L, f) -> (
+    result is ([])
+    n is (length of (L))
+    i is (0)
+    while (i < n) is true do (
+        elem is (index of (L, i))
+        result is (result + [f of (elem)])
+        i is (i + 1)
+    )
+    output (result)
+))
+
+
+$ Pattern matching with strings, union, and intersection patterns
+wordMatcher is (function of (s) -> (
+    match (s) with (
+        pattern ("*ing" | "*ings") -> (output ("End-ing(s)"))
+        pattern ("super*") -> (output ("Super start"))
+        pattern ("*s*s*s*") -> (output ("3 S's"))
+        pattern ("____" & "*o*") -> (output ("4 with o"))
+        pattern ("*") -> (output ("Other"))
+    )
+))
+
+$ Pattern matching with numbers, basic lists, and wildcard patterns
+factorMatcher is (function of (n) -> (
+    match ([n % 3, n % 5]) with (
+        pattern ([0, 0]) -> (output ("FizzBuzz"))
+        pattern ([0, _]) -> (output ("Fizz"))
+        pattern ([_, 0]) -> (output ("Buzz"))
+        pattern ([_, _]) -> (output (n))
+    )
+))
+
+$ Pattern matching with variables
+variableMatcher is (function of (x, y) -> (
+    match ([x, y % 5]) with (
+        pattern ([0, n]) -> (output ("Z" * n))
+        pattern ([1, n]) -> (output ("O" * n))
+        pattern ([2, n]) -> (output ("T" * n))
+        pattern ([q, n]) -> (output (q * n))
+    )
+))
+
+$ Pattern matching to identify list length and split lists
+listMatcher is (function of (L) -> (
+    match (L) with (
+        pattern ([]) -> (output (0))
+        pattern ([head, *rest]) -> (output (head - (listMatcher of (rest))))
+    )
+))
+
+$ Combination of various pattern matching tools to flatten a list and eliminate strings
+compoundMatcher is (function of (L) -> (
+    match (L) with (
+        pattern ([] | "*") -> (output ([]))
+        pattern ([head, *rest]) -> (output ((compoundMatcher of (head)) + (compoundMatcher of (rest))))
+        pattern (elem) -> (output [elem])
+    )
+))
+
+bstInsert is (function of (T, k) -> (
+    match (T) with (
+        pattern ([]) -> (output ([[], k, []]))
+        pattern ([L, key, R]) -> (
+            if (k < key) is true then do (output ([bstInsert of (L, k), key, R]))
+            otherwise do (output ([L, key, bstInsert of (R, k)]))
+        )
+    )
+))
+
+bstInsertions is (function of (T, L) -> (
+    for each element k of (L) do (
+        T is (bstInsert of (T, k))
+    )
+    output (T)
+))
+
+bstLookup is (function of (T, k) -> (
+    match (T) with (
+        pattern ([]) -> (output (false))
+        pattern ([L, key, R]) -> (
+            if (k = key) is true then do (output (true))
+            if (k < key) is true then do (output (bstLookup of (L, k)))
+            otherwise do (output (bstLookup of (R, k)))
+        )
+    )
+))
+
+A is (map of (["supersizing", "superhero", "scissor", "book", "alpha", "tidings"], wordMatcher))
+B is (map of ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], factorMatcher))
+C is ([variableMatcher of (0, 13), variableMatcher of (1, 24), variableMatcher of (2, 81), variableMatcher of (9, 3)])
+D is (map of ([[], [1], [1, 5], [1, 5, 1], [1, 5, 1, 1], [1, 5, 1, 1, 2]], listMatcher))
+E is (compoundMatcher of ([1, [5, "chee", [1, [1, 2], ["foo", [[]], "bar", []], [1, [], 5]], 2], [[1], 3]]))
+F is (bstInsertions of ([], [16, 1, -10, 64, 25, 5, 100]))
+G is (map of ([-15, -10, 0, 1, 5, 10, 16, 36, 64, 100], function of (k) -> (output (bstLookup of (F, k)))))

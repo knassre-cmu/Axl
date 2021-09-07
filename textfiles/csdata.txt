@@ -1,0 +1,14 @@
+15110,Principles of Computing,Python,461,11
+15112,Fundementals of Programming and Computer Science,Python,482,15
+15122,Principles of Imperative Programming,C,461,15
+15150,Principles of Functional Programming,SML,472,15
+15210,Parallel and Sequential Data Structures and Algorithms,SML,394,14
+15213,Introduction to Computer Systems,C,394,16
+15251,Great Theoretical Ideas in Computer Science,nothing,487,14
+15281,Artificial Intelligence: Representation and Problem Solving,Python,451,11
+15410,Design and Analysis of Algorithms,SML,407,24
+15411,Compiler Design,OCaml,429,24
+15415,Database Applications,SQL,433,13
+15440,Distributed Systems,C,403,16
+15451,Operating System Design and Implementation,C,435,14
+15455,Undergraduate Complexity Theory,nothing,491,11
