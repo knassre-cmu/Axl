@@ -6,9 +6,9 @@
 15213,Introduction to Computer Systems,C,394,16
 15251,Great Theoretical Ideas in Computer Science,nothing,487,14
 15281,Artificial Intelligence: Representation and Problem Solving,Python,451,11
-15410,Design and Analysis of Algorithms,SML,407,24
+15410,Operating System Design and Implementation,C,435,14
 15411,Compiler Design,OCaml,429,24
 15415,Database Applications,SQL,433,13
 15440,Distributed Systems,C,403,16
-15451,Operating System Design and Implementation,C,435,14
+15451,Design and Analysis of Algorithms,SML,407,24
 15455,Undergraduate Complexity Theory,nothing,491,11
